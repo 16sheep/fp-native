@@ -2,26 +2,7 @@ import React, { Component } from 'react';
 import { TextInput, View, FlatList, Text, Button, ScrollView } from 'react-native';
 import SecretInput from './SecretInput'
 import { getFestivals } from '../adapter/adapter.js'
-import { StyleSheet } from 'react-native'
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 4,
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10
-  },
-  title: {
-    fontSize: 19,
-    fontWeight: 'bold',
-  },
-  activeTitle: {
-    color: 'red',
-  },
-});
+
 
 
 class FestivalSearch extends Component {
@@ -47,15 +28,15 @@ class FestivalSearch extends Component {
     })
   }
 
-  setAreas = (id) => {
+  setAreas = (areas) => {
     this.setState({
-      areas: this.findFestival(id)
+      areas: areas
     })
   }
 
-  setEvents = (id) => {
+  setEvents = (events) => {
     this.setState({
-      events: this.findFestival(id)
+      events: events
     })
   }
 
@@ -92,12 +73,22 @@ class FestivalSearch extends Component {
         />
         <FlatList
           data={this.state.festivalFilter ? filteredFestivals : this.state.festivals}
-          renderItem={({item}) => <Button style={styles.button} key={`festivalListItem-${item.id}`} onPress={() => {this.selectFestival(item.id)}} title={item.name}/>}
+          renderItem={({item}) => <Button
+            key={`festivalListItem-${item.id}`}
+            onPress={() => {this.selectFestival(item.id)}}
+            title={item.name}/>}
         />
         {this.state.selectedFestival?
-        <SecretInput navigation={this.props.navigation} selectedFestival={this.state.selectedFestival}/>
+        <SecretInput
+          setAreas={this.setAreas}
+          setEvents={this.setEvents}
+          navigation={this.props.navigation}
+          selectedFestival={this.state.selectedFestival}
+          areas={this.state.areas}
+          events={this.state.events}/>
         : null}
       </ScrollView>
+
     );
   }
 }
