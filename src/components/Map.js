@@ -22,6 +22,7 @@ class Map extends Component {
       //
       // </ImageBackground>
       <Text>Hi</Text>
+
     );
   }
 }

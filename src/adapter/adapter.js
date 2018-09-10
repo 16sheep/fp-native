@@ -7,6 +7,15 @@ const getFestivals = () => {
   }).then(resp => resp.json())
 }
 
+const getFestivalAreas = (id) => {
+  return fetch(`${urlBase}/festival_areas/${id}`, {
+  }).then(resp => resp.json())
+}
+
+const getFestivalEvents = (id) => {
+  return fetch(`${urlBase}/festival_events/${id}`, {
+  }).then(resp => resp.json())
+}
 
 ////FROM ADMIN///
 const createUser = (userDetails) => {
@@ -72,14 +81,14 @@ const setUserFestivals = (body) => {
 
 //EVENTS//
 
-const getFestivalEvents = (id) => {
-  return fetch(`${urlBase}/festival_events/${id}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('token')
-    }
-  }).then(resp => resp.json())
-}
+// const getFestivalEvents = (id) => {
+//   return fetch(`${urlBase}/festival_events/${id}`, {
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: localStorage.getItem('token')
+//     }
+//   }).then(resp => resp.json())
+// }
 
 const createEvent = (eventDetails) => {
   return fetch(`${urlBase}/events`, {
@@ -118,14 +127,14 @@ const destroyEvent = (details) => {
 
 
 //AREAS
-const getFestivalAreas = (id) => {
-  return fetch(`${urlBase}/festival_areas/${id}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('token')
-    }
-  }).then(resp => resp.json())
-}
+// const getFestivalAreas = (id) => {
+//   return fetch(`${urlBase}/festival_areas/${id}`, {
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: localStorage.getItem('token')
+//     }
+//   }).then(resp => resp.json())
+// }
 
 export {
   createUser,
