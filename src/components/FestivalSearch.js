@@ -76,7 +76,7 @@ class FestivalSearch extends Component {
           color="white"
           value={this.state.festivalFilter}
           onChangeText={(festivalFilter) => this.setState({festivalFilter})}
-          style={{height: 50, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'80%', borderRadius:3, backgroundColor:'white', color:'black' }}
+          style={{fontSize:20,height: 50, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'80%', borderRadius:3, backgroundColor:'white', color:'#666' }}
           placeholder="Search festivals"
         />
 
@@ -84,7 +84,7 @@ class FestivalSearch extends Component {
           filteredFestivals.map((f) => {return <ListItem onPress={() => {this.selectFestival(f.id)}} key={`festival-list-item-${f}`}title={f.name}/>})
         }
         </List>
-
+        </View>
         {this.state.selectedFestival?
         <SecretInput
           setAreas={this.setAreas}
@@ -92,9 +92,9 @@ class FestivalSearch extends Component {
           navigation={this.props.navigation}
           selectedFestival={this.state.selectedFestival}
           areas={this.state.areas}
-          events={this.state.events}/>
+          events={this.state.events}
+          selectFestival={this.selectFestival}/>
         : null}
-        </View>
       </ScrollView>
 
     );

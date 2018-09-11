@@ -17,6 +17,12 @@ class Map extends Component {
     return events
   }
 
+  convertTime = (time) => {
+    let t = new Date(time)
+    t = t.toLocaleString().slice(0, -3)
+    return t.toLocaleString()
+  }
+
   render() {
     const { selectedFestival, areas, events, setSelectedEvent, setSelectedArea, selectedArea } = this.props.navigation.state.params
     const areaButtons = areas.map((a) => {
@@ -49,7 +55,7 @@ class Map extends Component {
             <Text>{selectedArea.description}</Text>
             <Button title="close" onPress={() => setSelectedArea("")}/>
             <List width='100%' containerStyle={{marginBottom: 20}}>{
-              this.findAreaEvents(selectedArea.id).map((e) => {return <ListItem onPress={() => {setSelectedEvent(e)}} key={`event-button-map${e.id}`} title={e.name}/>})
+              this.findAreaEvents(selectedArea.id).map((e) => {return <ListItem onPress={() => {setSelectedEvent(e)}} key={`event-button-map${e.id}`} title={`${e.name} | ${this.convertTime(e.time_from)}`}/>})
             }
             </List>
           </View>:null

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Dimensions, TextInput, View,Button, ScrollView, Image} from 'react-native';
-import { ButtonGroup, List, ListItem, Text} from 'react-native-elements'
+import { Dimensions, TextInput, View, ScrollView, Image} from 'react-native';
+import { ButtonGroup, List, ListItem, Text, Button} from 'react-native-elements'
 import {getFestivalAreas, getFestivalEvents, getFestivalCategories} from '../adapter/adapter.js'
 
 let width = Dimensions.get('window').width
@@ -48,6 +48,7 @@ class FestivalPage extends Component {
 
   convertTime = (time) => {
     let t = new Date(time)
+    t = t.toLocaleString().slice(0, -3)
     return t.toLocaleString()
   }
 
@@ -91,7 +92,7 @@ class FestivalPage extends Component {
       }
     })
     return (
-      <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+      <ScrollView style={{ width:'100%', flex: 1, backgroundColor: "white" }}>
       {
         selectedIndex === 3 ?
           this.props.navigation.navigate('Map', {selectedArea: selectedArea, setSelectedArea: setSelectedArea, selectedFestival: selectedFestival, areas: areas, events: events, setSelectedEvent: setSelectedEvent }):null
@@ -111,13 +112,22 @@ class FestivalPage extends Component {
           selectedIndex === 1?
             <ScrollView>
             {selectedCategory?
-              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', padding:10 }}>
+              <View style={{elevation: 1, marginLeft:10, width:'95%', flex: 1, flexDirection: 'column', alignItems: 'center', padding:10, borderWidth:1, borderColor:'#999', borderRadius:3}}>
                 <Text h4>{selectedCategory}</Text>
-                <Button title="close" onPress={() => this.setState({selectedCategory: ""})}/>
+
                 <List width='100%' containerStyle={{marginBottom: 20}}>{
-                  this.findCategoryEvents(selectedCategory).map((e) => {return <ListItem onPress={() => this.setState({selectedEvent: e, selectedIndex: 0})} key={`event-button-cat${e.id}`} title={e.name}/>})
+                  this.findCategoryEvents(selectedCategory).map((e) => {return <ListItem onPress={() => this.setState({selectedEvent: e, selectedIndex: 0})} key={`event-button-cat${e.id}`} title={`${e.name} | ${this.convertTime(e.time_from)}`}/>})
                 }
                 </List>
+                <Button
+                icon={{
+                        name: 'close',
+                        size: 30,
+                        color: '#333'
+                      }}
+                  onPress={() => this.setState({selectedCategory: ""})}
+                  buttonStyle={{backgroundColor: 'white', height: 50}}/>
+                  />
               </View>:null
             }
             <View style={{width:'100%', alignItems:'center'}}>
@@ -138,18 +148,27 @@ class FestivalPage extends Component {
           selectedIndex === 2?
             <ScrollView>
             {selectedArea?
-              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', padding:10 }}>
+              <View style={{elevation: 1, marginLeft:10, width:'95%', flex: 1, flexDirection: 'column', alignItems: 'center', padding:10, borderWidth:1, borderColor:'#999', borderRadius:3}}>
               <Image
                 style={{height:200, width:200, margin: 0, padding: 0}}
                 source={{uri:selectedArea.icon}}
                 />
                 <Text h4>{selectedArea.name}</Text>
-                <Text>{selectedArea.description}</Text>
-                <Button title="close" onPress={() => this.setState({selectedArea: ""})}/>
+                <Text style={{textAlign:'center'}}>{selectedArea.description}</Text>
+
                 <List width='100%' containerStyle={{marginBottom: 20}}>{
-                  this.findAreaEvents(selectedArea.id).map((e) => {return <ListItem onPress={() => this.setState({selectedEvent: e, selectedIndex: 0})} key={`event-button-${e.id}`} title={e.name}/>})
+                  this.findAreaEvents(selectedArea.id).map((e) => {return <ListItem onPress={() => this.setState({selectedEvent: e, selectedIndex: 0})} key={`event-button-${e.id}`} title={`${e.name} | ${this.convertTime(e.time_from)}`}/>})
                 }
                 </List>
+                <Button
+                icon={{
+                        name: 'close',
+                        size: 30,
+                        color: '#333'
+                      }}
+                  onPress={() => this.setState({selectedArea: ""})}
+                  buttonStyle={{backgroundColor: 'white', height: 50}}/>
+                  />
               </View>:null
             }
             <View style={{width:'100%', alignItems:'center'}}>
@@ -170,13 +189,40 @@ class FestivalPage extends Component {
           selectedIndex === 0?
             <ScrollView>
             {selectedEvent?
-              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', padding:10 }}>
+              <View style={{elevation: 1, marginLeft:10, width:'95%', flex: 1, flexDirection: 'column', alignItems: 'center', padding:10, borderWidth:1, borderColor:'#999', borderRadius:3}}>
                 <Text h1>{selectedEvent.name}</Text>
                 <Text>{`${this.convertTime(selectedEvent.time_from)} - ${this.convertTime(selectedEvent.time_until)}`}</Text>
-                <Button onPress={()=> this.setState({selectedIndex: 1, selectedCategory: selectedEvent.category }) } title={selectedEvent.category}/>
-                <Text>{selectedEvent.description}</Text>
-                <Button onPress={()=> this.setState({selectedIndex: 2, selectedArea: this.findEventArea(selectedEvent.area_id) }) } title={this.findEventArea(selectedEvent.area_id).name}/>
-                <Button title="close" onPress={() => this.setState({selectedEvent: ""})}/>
+                <View
+                    style={{
+                      width:'100%',
+                      borderBottomColor: '#FFD700',
+                      borderBottomWidth: 1,
+                      margin:10
+                    }}
+                  />
+                <View style={{flex: 1, flexDirection: 'row', width:'90%', justifyContent:'space-evenly'}}>
+                  <Button
+                    onPress={()=> this.setState({ selectedIndex: 1, selectedCategory: selectedEvent.category }) }
+                    title={selectedEvent.category}
+                    textStyle={{color: 'white'}}
+                    buttonStyle={{backgroundColor: '#7AC7EA', height: 45, borderRadius:3, margin:10,paddingLeft:30, paddingRight:30}}/>
+
+                  <Button
+                    onPress={()=> this.setState({selectedIndex: 2, selectedArea: this.findEventArea(selectedEvent.area_id) }) }
+                    title={this.findEventArea(selectedEvent.area_id).name}
+                    textStyle={{color: 'white'}}
+                    buttonStyle={{backgroundColor: '#7AC7EA',  paddingLeft:30, paddingRight:30,height: 45 ,margin:10, borderRadius:3}}/>
+                </View>
+                <Text style={{textAlign: 'center'}}>{selectedEvent.description}</Text>
+                <Button
+                icon={{
+                        name: 'close',
+                        size: 30,
+                        color: '#333',
+                      }}
+                  onPress={() => this.setState({selectedEvent: ""})}
+                  buttonStyle={{backgroundColor: 'white', height: 50, margin:10}}/>
+                  />
               </View>:null
             }
             <View style={{width:'100%', alignItems:'center'}}>
