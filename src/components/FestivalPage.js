@@ -175,7 +175,7 @@ class FestivalPage extends Component {
             <TextInput
               value={areaFilter}
               onChangeText={(areaFilter) => this.setState({areaFilter})}
-              style={{backgroundColor:'white', color:'white', height: 75, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'90%', borderRadius:3, color:'#333', fontSize:30}}
+              style={{borderWidth:1, borderBottomColor:'#FFD700',backgroundColor:'white', color:'white', height: 75, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'90%', borderRadius:3, color:'#333', fontSize:30}}
               placeholder="Search areas"
             />
               <List containerStyle={{marginBottom: 20, width:'90%', borderRadius:3, borderColor: 'white', backgroundColor:'transparent'}}>{
@@ -233,7 +233,7 @@ class FestivalPage extends Component {
               placeholder="Search events"
             />
               <List containerStyle={{marginBottom: 20, width:'90%', borderRadius:3, borderColor: 'white', backgroundColor:'transparent'}}>{
-                filteredEvents.map((e) => {return <ListItem containerStyle={{ borderBottomColor: '#fd5c63', backgroundColor:'transparent'}} onPress={() => this.setState({selectedEvent: e})} key={`event-list-item-${e.id}`}title={e.name}/>})
+                filteredEvents.map((e) => {return <ListItem containerStyle={{ borderBottomColor: '#fd5c63', backgroundColor:'transparent'}} onPress={() => this.setState({selectedEvent: e})} key={`event-list-item-${e.id}`}title={`${e.name} | ${this.convertTime(e.time_from)}`}/>})
               }
               </List>
               </View>

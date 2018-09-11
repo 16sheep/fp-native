@@ -3,7 +3,7 @@ import { TextInput, View, FlatList, Text, Button, ScrollView, Image, Dimensions 
 import {List, ListItem } from 'react-native-elements'
 import SecretInput from './SecretInput'
 import { getFestivals } from '../adapter/adapter.js'
-
+import { AsyncStorage } from "react-native"
 
 let width = Dimensions.get('window').width
 let height = Dimensions.get('window').height

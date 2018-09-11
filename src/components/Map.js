@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, TextInput, View, FlatList, TouchableOpacity, ScrollView, ImageBackground, Image, Dimensions, Button } from 'react-native';
-import { List, ListItem, Text } from 'react-native-elements';
+import { Alert, TextInput, View, FlatList, TouchableOpacity, ScrollView, ImageBackground, Image, Dimensions } from 'react-native';
+import { List, ListItem, Text, Button } from 'react-native-elements';
 
 // import styles from '../styles'
 let width = Dimensions.get('window').width
@@ -53,7 +53,16 @@ class Map extends Component {
             />
             <Text h4>{selectedArea.name}</Text>
             <Text>{selectedArea.description}</Text>
-            <Button title="close" onPress={() => setSelectedArea("")}/>
+            <Button
+            icon={{
+                    name: 'close',
+                    size: 30,
+                    color: '#333',
+                  }}
+              onPress={() => setSelectedArea("")}
+              buttonStyle={{backgroundColor: 'transparent', height: 50, margin:10}}/>
+              />
+
             <List width='100%' containerStyle={{marginBottom: 20}}>{
               this.findAreaEvents(selectedArea.id).map((e) => {return <ListItem onPress={() => {setSelectedEvent(e)}} key={`event-button-map${e.id}`} title={`${e.name} | ${this.convertTime(e.time_from)}`}/>})
             }

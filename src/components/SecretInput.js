@@ -19,7 +19,7 @@ export default class SecretInput extends React.Component {
     }
 
     return(
-      <View style={{width:'100%', flex:1, alignItems:'center', position:'absolute', height:500, backgroundColor:'rgba(255, 255, 255, 0.8)', top: 45}}>
+      <View style={{width:'100%', flex:1, alignItems:'center', position:'absolute', height:500, backgroundColor:'rgba(255, 255, 255, 0.9)', top: 40}}>
         <View style={{ top:150, width:'100%', flex:1, alignItems:'center', position:'absolute'}}>
 
         <TextInput
@@ -27,7 +27,7 @@ export default class SecretInput extends React.Component {
           onChangeText={(secret) => {
             this.setState({secret})
           }}
-          style={{fontSize:20, color:'#666',backgroundColor:'white', color:'white', height: 50, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'80%', borderRadius:3, color:'black' }}
+          style={{fontSize:20, color:'#666',backgroundColor:'white', color:'white', height: 50, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'80%',borderWidth:1, borderBottomColor:'#fd5c63', borderRadius:3, color:'black' }}
           placeholder="Enter secret..."
         />
         <Button
