@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextInput, View,Button, ScrollView,  Header} from 'react-native';
+import { TextInput, View,Button, ScrollView, Image} from 'react-native';
 import { ButtonGroup, List, ListItem, Text} from 'react-native-elements'
 import {getFestivalAreas, getFestivalEvents, getFestivalCategories} from '../adapter/adapter.js'
 
@@ -88,6 +88,17 @@ class FestivalPage extends Component {
         {
           selectedIndex === 2?
             <ScrollView>
+            {selectedArea?
+              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', padding:10 }}>
+              <Image
+                style={{height:200, width:200, margin: 0, padding: 0}}
+                source={{uri:selectedArea.icon}}
+                />
+                <Text h4>{selectedArea.name}</Text>
+                <Text>{selectedArea.description}</Text>
+                <Button title="close" onPress={() => this.setState({selectedArea: ""})}/>
+              </View>:null
+            }
             <TextInput
               value={areaFilter}
               onChangeText={(areaFilter) => this.setState({areaFilter})}
@@ -108,7 +119,7 @@ class FestivalPage extends Component {
                 <Text h1>{selectedEvent.name}</Text>
                 <Text h4>{selectedEvent.category}</Text>
                 <Text>{selectedEvent.description}</Text>
-                <Text h4>{this.findEventArea(selectedEvent.area_id).name}</Text>
+                <Button onPress={()=> this.setState({selectedIndex: 2, selectedArea: this.findEventArea(selectedEvent.area_id) }) } title={this.findEventArea(selectedEvent.area_id).name}/>
                 <Button title="close" onPress={() => this.setState({selectedEvent: ""})}/>
               </View>:null
             }
