@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { TextInput, View, FlatList, Text, Button, ScrollView } from 'react-native';
+import {List, ListItem } from 'react-native-elements'
 import SecretInput from './SecretInput'
 import { getFestivals } from '../adapter/adapter.js'
 
@@ -64,20 +65,19 @@ class FestivalSearch extends Component {
     })
 
     return (
-      <ScrollView style={{ height: 10, flex: 1, backgroundColor: "yellow" }}>
+      <ScrollView style={{ height: 10, flex: 1, backgroundColor: "white" }}>
         <TextInput
           value={this.state.festivalFilter}
           onChangeText={(festivalFilter) => this.setState({festivalFilter})}
           style={{height: 40, borderColor: 'black', borderWidth: 1}}
           placeholder="Search festivals"
         />
-        <FlatList
-          data={this.state.festivalFilter ? filteredFestivals : this.state.festivals}
-          renderItem={({item}) => <Button
-            key={`festivalListItem-${item.id}`}
-            onPress={() => {this.selectFestival(item.id)}}
-            title={item.name}/>}
-        />
+
+        <List containerStyle={{marginBottom: 20}}>{
+          filteredFestivals.map((f) => {return <ListItem onPress={() => {this.selectFestival(f.id)}} key={`festival-list-item-${f}`}title={f.name}/>})
+        }
+        </List>
+
         {this.state.selectedFestival?
         <SecretInput
           setAreas={this.setAreas}

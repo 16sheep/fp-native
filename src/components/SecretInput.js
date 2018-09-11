@@ -1,5 +1,6 @@
 import React from 'react'
-import { TextInput, View, Text, Button } from 'react-native';
+import { TextInput, View} from 'react-native';
+import { Text, Button } from 'react-native-elements';
 
 
 export default class SecretInput extends React.Component {

@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { Text, Button } from 'react-native-elements';
+import { View} from 'react-native';
+
 
 class Home extends React.Component {
   render() {

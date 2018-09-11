@@ -12,6 +12,11 @@ const getFestivalAreas = (id) => {
   }).then(resp => resp.json())
 }
 
+const getFestivalCategories = (id) => {
+  return fetch(`${urlBase}/festival_categories/${id}`, {
+  }).then(resp => resp.json())
+}
+
 const getFestivalEvents = (id) => {
   return fetch(`${urlBase}/festival_events/${id}`, {
   }).then(resp => resp.json())
@@ -22,5 +27,6 @@ const getFestivalEvents = (id) => {
 export {
   getFestivalEvents,
   getFestivalAreas,
-  getFestivals
+  getFestivals,
+  getFestivalCategories
 }
