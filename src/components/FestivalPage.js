@@ -34,6 +34,11 @@ class FestivalPage extends Component {
     return area
   }
 
+  findAreaEvents = (id) => {
+    const events = this.state.events.filter((e) => e.area_id === id)
+    return events
+  }
+
   render() {
 
     const { selectedFestival} = this.props.navigation.state.params
@@ -103,6 +108,10 @@ class FestivalPage extends Component {
                 <Text h4>{selectedArea.name}</Text>
                 <Text>{selectedArea.description}</Text>
                 <Button title="close" onPress={() => this.setState({selectedArea: ""})}/>
+                <List width='100%' containerStyle={{marginBottom: 20}}>{
+                  this.findAreaEvents(selectedArea.id).map((e) => {return <ListItem onPress={() => this.setState({selectedEvent: e, selectedIndex: 0})} key={`event-button-${e.id}`} title={e.name}/>})
+                }
+                </List>
               </View>:null
             }
             <TextInput
@@ -115,6 +124,7 @@ class FestivalPage extends Component {
                 filteredAreas.map((a) => {return <ListItem onPress={() => this.setState({selectedArea: a})} key={`area-list-item-${a.id}`}title={a.name}/>})
               }
               </List>
+
             </ScrollView>:null
         }
         {
