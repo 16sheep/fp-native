@@ -118,6 +118,7 @@ class FestivalPage extends Component {
               <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', padding:10 }}>
                 <Text h1>{selectedEvent.name}</Text>
                 <Text h4>{selectedEvent.category}</Text>
+                <Button onPress={()=> this.setState({selectedIndex: 1, selectedCategory: selectedEvent.category }) } title={selectedEvent.category}/>
                 <Text>{selectedEvent.description}</Text>
                 <Button onPress={()=> this.setState({selectedIndex: 2, selectedArea: this.findEventArea(selectedEvent.area_id) }) } title={this.findEventArea(selectedEvent.area_id).name}/>
                 <Button title="close" onPress={() => this.setState({selectedEvent: ""})}/>
