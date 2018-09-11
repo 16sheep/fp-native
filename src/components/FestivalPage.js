@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { TextInput, View,Button, ScrollView, Image} from 'react-native';
+import { Dimensions, TextInput, View,Button, ScrollView, Image} from 'react-native';
 import { ButtonGroup, List, ListItem, Text} from 'react-native-elements'
 import {getFestivalAreas, getFestivalEvents, getFestivalCategories} from '../adapter/adapter.js'
 
+let width = Dimensions.get('window').width
+let height = Dimensions.get('window').height
 
 class FestivalPage extends Component {
 
@@ -89,7 +91,7 @@ class FestivalPage extends Component {
       }
     })
     return (
-      <ScrollView style={{ height: 10, flex: 1, backgroundColor: "white" }}>
+      <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
       {
         selectedIndex === 3 ?
           this.props.navigation.navigate('Map', {selectedArea: selectedArea, setSelectedArea: setSelectedArea, selectedFestival: selectedFestival, areas: areas, events: events, setSelectedEvent: setSelectedEvent }):null
@@ -98,7 +100,12 @@ class FestivalPage extends Component {
           onPress={this.updateIndex}
           selectedIndex={selectedIndex}
           buttons={buttons}
-          containerStyle={{height: 50}}
+          containerStyle={{height: 50, borderColor:'#fd5c63'}}
+          innerBorderStyle={{color:'#fd5c63'}}
+          selectedButtonStyle={{backgroundColor:'#fd5c63'}}
+          buttonStyle={{backgroundColor:'white', borderLeftColor:'#fd5c63'}}
+          textStyle={{fontSize:12, color: '#fd5c63'}}
+          selectedTextStyle={{color:"white"}}
         />
         {
           selectedIndex === 1?
@@ -113,16 +120,18 @@ class FestivalPage extends Component {
                 </List>
               </View>:null
             }
+            <View style={{width:'100%', alignItems:'center'}}>
               <TextInput
                 value={categoryFilter}
                 onChangeText={(categoryFilter) => this.setState({categoryFilter})}
-                style={{height: 40, borderColor: 'black', borderWidth: 1}}
+                style={{backgroundColor:'white', color:'white', height: 75, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'90%', borderRadius:3, color:'#333', fontSize:30}}
                 placeholder="Search categories"
               />
-                <List containerStyle={{marginBottom: 20}}>{
-                  filteredCategories.map((c) => {return <ListItem onPress={() => this.setState({selectedCategory: c})} key={`category-list-item-${c}`}title={c}/>})
+                <List containerStyle={{marginBottom: 20, width:'90%', borderRadius:3, borderColor: 'white', backgroundColor:'transparent'}}>{
+                  filteredCategories.map((c) => {return <ListItem containerStyle={{ borderBottomColor: '#fd5c63', backgroundColor:'transparent'}} onPress={() => this.setState({selectedCategory: c})} key={`category-list-item-${c}`}title={c}/>})
                 }
                 </List>
+              </View>
             </ScrollView>:null
         }
         {
@@ -143,17 +152,18 @@ class FestivalPage extends Component {
                 </List>
               </View>:null
             }
+            <View style={{width:'100%', alignItems:'center'}}>
             <TextInput
               value={areaFilter}
               onChangeText={(areaFilter) => this.setState({areaFilter})}
-              style={{height: 40, borderColor: 'black', borderWidth: 1}}
+              style={{backgroundColor:'white', color:'white', height: 75, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'90%', borderRadius:3, color:'#333', fontSize:30}}
               placeholder="Search areas"
             />
-              <List containerStyle={{marginBottom: 20}}>{
-                filteredAreas.map((a) => {return <ListItem onPress={() => this.setState({selectedArea: a})} key={`area-list-item-${a.id}`}title={a.name}/>})
+              <List containerStyle={{marginBottom: 20, width:'90%', borderRadius:3, borderColor: 'white', backgroundColor:'transparent'}}>{
+                filteredAreas.map((a) => {return <ListItem containerStyle={{ borderBottomColor: '#fd5c63', backgroundColor:'transparent'}} onPress={() => this.setState({selectedArea: a})} key={`area-list-item-${a.id}`}title={a.name}/>})
               }
               </List>
-
+              </View>
             </ScrollView>:null
         }
         {
@@ -169,16 +179,18 @@ class FestivalPage extends Component {
                 <Button title="close" onPress={() => this.setState({selectedEvent: ""})}/>
               </View>:null
             }
+            <View style={{width:'100%', alignItems:'center'}}>
             <TextInput
               value={eventFilter}
               onChangeText={(eventFilter) => this.setState({eventFilter})}
-              style={{height: 40, borderColor: 'black', borderWidth: 1}}
+              style={{backgroundColor:'white', color:'white', height: 75, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'90%', borderRadius:3, color:'#333', fontSize:30}}
               placeholder="Search events"
             />
-              <List containerStyle={{marginBottom: 20}}>{
-                filteredEvents.map((e) => {return <ListItem onPress={() => this.setState({selectedEvent: e})} key={`event-list-item-${e.id}`}title={e.name}/>})
+              <List containerStyle={{marginBottom: 20, width:'90%', borderRadius:3, borderColor: 'white', backgroundColor:'transparent'}}>{
+                filteredEvents.map((e) => {return <ListItem containerStyle={{ borderBottomColor: '#fd5c63', backgroundColor:'transparent'}} onPress={() => this.setState({selectedEvent: e})} key={`event-list-item-${e.id}`}title={e.name}/>})
               }
               </List>
+              </View>
             </ScrollView>:null
         }
 

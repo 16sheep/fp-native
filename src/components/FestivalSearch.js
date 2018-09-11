@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { TextInput, View, FlatList, Text, Button, ScrollView } from 'react-native';
+import { TextInput, View, FlatList, Text, Button, ScrollView, Image, Dimensions } from 'react-native';
 import {List, ListItem } from 'react-native-elements'
 import SecretInput from './SecretInput'
 import { getFestivals } from '../adapter/adapter.js'
 
 
+let width = Dimensions.get('window').width
+let height = Dimensions.get('window').height
 
 class FestivalSearch extends Component {
 
@@ -65,15 +67,20 @@ class FestivalSearch extends Component {
     })
 
     return (
-      <ScrollView style={{ height: 10, flex: 1, backgroundColor: "white" }}>
+      <ScrollView style={{flex: 1, backgroundColor: "white"}}>
+      <View>
+         <Image style={{ height: 700, width: 375, position: 'absolute', top:0, left:0 }} source={require('./logo.png')} />
+      </View>
+      <View style={{flex: 1, position: 'absolute', top:315, width:'100%', alignItems:'center'}}>
         <TextInput
+          color="white"
           value={this.state.festivalFilter}
           onChangeText={(festivalFilter) => this.setState({festivalFilter})}
-          style={{height: 40, borderColor: 'black', borderWidth: 1}}
+          style={{height: 50, borderColor: 'white', paddingLeft:20, borderWidth: 1, width:'80%', borderRadius:3, backgroundColor:'white', color:'black' }}
           placeholder="Search festivals"
         />
 
-        <List containerStyle={{marginBottom: 20}}>{
+        <List containerStyle={{marginBottom: 20, width:'80%', borderRadius:3, borderColor: 'white', backgroundColor:'transparent'}}>{
           filteredFestivals.map((f) => {return <ListItem onPress={() => {this.selectFestival(f.id)}} key={`festival-list-item-${f}`}title={f.name}/>})
         }
         </List>
@@ -87,6 +94,7 @@ class FestivalSearch extends Component {
           areas={this.state.areas}
           events={this.state.events}/>
         : null}
+        </View>
       </ScrollView>
 
     );

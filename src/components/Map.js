@@ -29,7 +29,7 @@ class Map extends Component {
     })
 
     return (
-      <ScrollView style={{flex:1, backgroundColor: 'transparent' }}>
+      <ScrollView style={{flex:1, backgroundColor: 'white' }}>
        <View>
            <Image
             style={{ position: 'absolute', top:0, left:0,  height:500, maxHeight:height, width:'100%'}}
