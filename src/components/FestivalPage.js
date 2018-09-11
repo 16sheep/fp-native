@@ -57,6 +57,21 @@ class FestivalPage extends Component {
       }
     })
 
+    const setSelectedEvent = (e) => {
+      this.setState({
+        selectedEvent: e,
+        selectedIndex: 0
+      }, () => {
+        this.props.navigation.navigate('FestivalPage')
+      })
+    }
+
+    const setSelectedArea = (a) => {
+      this.setState({
+        selectedArea: a
+      })
+    }
+
     const filteredCategories = cats.filter((c) => {
       if (c.toLowerCase().includes(categoryFilter.toLowerCase())) {
         return c
@@ -70,6 +85,10 @@ class FestivalPage extends Component {
     })
     return (
       <ScrollView style={{ height: 10, flex: 1, backgroundColor: "white" }}>
+      {
+        selectedIndex === 3 ?
+          this.props.navigation.navigate('Map', {selectedArea: selectedArea, setSelectedArea: setSelectedArea, selectedFestival: selectedFestival, areas: areas, events: events, setSelectedEvent: setSelectedEvent }):null
+      }
         <ButtonGroup
           onPress={this.updateIndex}
           selectedIndex={selectedIndex}
@@ -77,16 +96,12 @@ class FestivalPage extends Component {
           containerStyle={{height: 50}}
         />
         {
-          selectedIndex === 3 ?
-            this.props.navigation.navigate('Map', {selectedFestival: selectedFestival, areas: areas }):null
-        }
-        {
           selectedIndex === 1?
             <ScrollView>
             {selectedCategory?
               <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', padding:10 }}>
                 <Text h4>{selectedCategory}</Text>
-                <Button title="close" onPress={() => this.setState({selectedArea: ""})}/>
+                <Button title="close" onPress={() => this.setState({selectedCategory: ""})}/>
                 <List width='100%' containerStyle={{marginBottom: 20}}>{
                   this.findCategoryEvents(selectedCategory).map((e) => {return <ListItem onPress={() => this.setState({selectedEvent: e, selectedIndex: 0})} key={`event-button-cat${e.id}`} title={e.name}/>})
                 }

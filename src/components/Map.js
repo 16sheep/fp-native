@@ -1,20 +1,30 @@
 import React, { Component } from 'react';
-import { Alert, TextInput, View, FlatList, Text, TouchableOpacity, ScrollView, ImageBackground, Image, Dimensions } from 'react-native';
+import { Alert, TextInput, View, FlatList, TouchableOpacity, ScrollView, ImageBackground, Image, Dimensions, Button } from 'react-native';
+import { List, ListItem, Text } from 'react-native-elements';
+
 // import styles from '../styles'
 let width = Dimensions.get('window').width
 let height = Dimensions.get('window').height
 
 class Map extends Component {
 
+  state = {
+    area: ""
+  }
+
+  findAreaEvents = (id) => {
+    const events = this.props.navigation.state.params.events.filter((e) => e.area_id === id)
+    return events
+  }
+
   render() {
-    const { selectedFestival, areas } = this.props.navigation.state.params
+    const { selectedFestival, areas, events, setSelectedEvent, setSelectedArea, selectedArea } = this.props.navigation.state.params
     const areaButtons = areas.map((a) => {
-      return <TouchableOpacity key={`areaButton-${a.id}`} style={{top: a.y, left: a.x, margin: 0, padding: 0, position:'absolute'}} onPress={() => {console.log(a.x)}}>
+      return <TouchableOpacity key={`areaButton-${a.id}`} style={{top: a.y, left: a.x, margin: 0, padding: 0, position:'absolute'}} onPress={() => setSelectedArea(a)}>
         <Image
           style={{height:48, width:48, borderRadius:50, margin: 0, padding: 0}}
           source={{uri:a.icon}}
-          onPress={()=>{Alert.alert('HI')}}
-          onLongPress={()=>{Alert.alert(`long press ${a.name}`)}}/>
+          />
         </TouchableOpacity>
     })
 
@@ -29,6 +39,22 @@ class Map extends Component {
         <View style={{ flex:1 }}>
           {areaButtons}
         </View>
+        {selectedArea?
+          <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', padding:10, backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+          <Image
+            style={{height:200, width:200, margin: 0, padding: 0}}
+            source={{uri:selectedArea.icon}}
+            />
+            <Text h4>{selectedArea.name}</Text>
+            <Text>{selectedArea.description}</Text>
+            <Button title="close" onPress={() => setSelectedArea("")}/>
+            <List width='100%' containerStyle={{marginBottom: 20}}>{
+              this.findAreaEvents(selectedArea.id).map((e) => {return <ListItem onPress={() => {setSelectedEvent(e)}} key={`event-button-map${e.id}`} title={e.name}/>})
+            }
+            </List>
+          </View>:null
+
+        }
      </ScrollView>
     );
   }
