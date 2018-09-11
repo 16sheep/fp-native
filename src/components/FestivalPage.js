@@ -39,6 +39,11 @@ class FestivalPage extends Component {
     return events
   }
 
+  findCategoryEvents = (category) => {
+    const events = this.state.events.filter((e) => e.category === category)
+    return events
+  }
+
   render() {
 
     const { selectedFestival} = this.props.navigation.state.params
@@ -82,6 +87,10 @@ class FestivalPage extends Component {
               <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', padding:10 }}>
                 <Text h4>{selectedCategory}</Text>
                 <Button title="close" onPress={() => this.setState({selectedArea: ""})}/>
+                <List width='100%' containerStyle={{marginBottom: 20}}>{
+                  this.findCategoryEvents(selectedCategory).map((e) => {return <ListItem onPress={() => this.setState({selectedEvent: e, selectedIndex: 0})} key={`event-button-cat${e.id}`} title={e.name}/>})
+                }
+                </List>
               </View>:null
             }
               <TextInput
