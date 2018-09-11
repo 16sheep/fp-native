@@ -44,6 +44,11 @@ class FestivalPage extends Component {
     return events
   }
 
+  convertTime = (time) => {
+    let t = new Date(time)
+    return t.toLocaleString()
+  }
+
   render() {
 
     const { selectedFestival} = this.props.navigation.state.params
@@ -157,6 +162,7 @@ class FestivalPage extends Component {
             {selectedEvent?
               <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', padding:10 }}>
                 <Text h1>{selectedEvent.name}</Text>
+                <Text>{`${this.convertTime(selectedEvent.time_from)} - ${this.convertTime(selectedEvent.time_until)}`}</Text>
                 <Button onPress={()=> this.setState({selectedIndex: 1, selectedCategory: selectedEvent.category }) } title={selectedEvent.category}/>
                 <Text>{selectedEvent.description}</Text>
                 <Button onPress={()=> this.setState({selectedIndex: 2, selectedArea: this.findEventArea(selectedEvent.area_id) }) } title={this.findEventArea(selectedEvent.area_id).name}/>

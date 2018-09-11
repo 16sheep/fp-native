@@ -23,7 +23,8 @@ export default class SecretInput extends React.Component {
         />
         <Button title="Unlock" onPress={() => {
             this.state.secret.toLowerCase() === selectedFestival.secret.toLowerCase() ?
-            this.props.navigation.navigate('FestivalPage', {selectedFestival: selectedFestival, areas: areas, events: events}) : console.log(`${this.state.secret} doesnt equal ${selectedFestival.secret}`)
+            this.props.navigation.navigate('FestivalPage', {selectedFestival: selectedFestival, areas: areas, events: events}) : console.log(`Secret is not correct`)
+            this.setState({secret: ""})
           }
         }/>
       </View>
