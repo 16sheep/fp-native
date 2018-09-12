@@ -31,35 +31,139 @@ class FestivalPage extends Component {
     AsyncStorage.setItem(key, newItem, () => _retrieveData(key))
   }
 
-  _retrieveData = async (key) => {
+  retrieveData = async (key, selectedFestival) => {
   try {
     const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-
+    value = JSON.parse(value);
+    console.log("VALUE", value);
+    console.log(selectedFestival);
+    const foundFestival = value.find((f) => {
+      return f.id === selectedFestival.id
+    })
+    if (value && foundFestival ) {
+        this.success(selectedFestival)
+    }
+    else {
+      console.log("on fail else");
+      this.fail(selectedFestival)
     }
    } catch (error) {
      // Error retrieving data
    }
 }
 
+  onlyUnique = (value, index, self) => {
+    return self.indexOf(value) === index;
+  }
+
+  success = async (selectedFestival) => {
+    ("GOING TO AS")
+    try {
+      let events = await AsyncStorage.getItem('events');
+      events = JSON.parse(events);
+
+      let areas = await AsyncStorage.getItem('areas');
+      areas = JSON.parse(areas);
+      const uniqueCats = {}
+
+      const festivalEvents = events.filter((e) => e.festival_id === selectedFestival.id)
+      const festivalAreas = areas.filter((a) => a.festival_id === selectedFestival.id)
+      console.log(festivalEvents[1])
+      const filteredCategories = festivalEvents.filter((c) => {
+          return c.category
+      })
+
+
+
+      console.log(uniqueCats);
+      this.setState({
+        events: festivalEvents,
+        areas: festivalAreas,
+        categories: uniqueCats
+      })
+
+     } catch (error) {
+       console.log("success error", error);
+     }
+  }
+
+  fail = (selectedFestival) => {
+    console.log("GOING TO API");
+    getFestivalAreas(selectedFestival.id)
+    .then(areas => this.setState({areas}))
+
+    getFestivalEvents(selectedFestival.id)
+    .then(events => this.sortByDate(events))
+    .then(events => this.setState({events}))
+
+    getFestivalCategories(selectedFestival.id)
+    .then(categories => {
+      console.log("cats",categories);this.setState({categories})})
+  }
+
   getStorageData = async (key, item) => {
     try {
-      const value = await JSON.parse(AsyncStorage.getItem(key));
+      const value = await AsyncStorage.getItem(key);
+      const valueCopy = JSON.parse(value);
 
-      const sameItem = valueCopy.find((i => {
-        return i.id === item.id}))
+      const sameItem = valueCopy.find(
+        (i => {
+          console.log("i", i)
+          console.log("item", item)
+
+          return i.id === item.id
+        })
+      )
 
       if (sameItem) {
         var index = valueCopy.indexOf(sameItem);
           if (index > -1) {
+
             valueCopy.splice(index, 1);
             valueCopy = [...valueCopy, item]
-            this.setStorageData(key, JSON.stringify([valueCopy]))
+            this.setStorageData(key, JSON.stringify(valueCopy))
           }
+      }
+      else {
+        valueCopy = [...valueCopy, item]
+        this.setStorageData(key, JSON.stringify(valueCopy))
       }
      } catch (error) {
   }
 }
+
+getStorageDataArr = async (key, item) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    const valueCopy = JSON.parse(value);
+
+    item.forEach(a => {
+      const sameItem = valueCopy.find(
+        (i => {
+          return i.id === a.id
+        })
+      )
+
+      if (sameItem) {
+        var index = valueCopy.indexOf(sameItem);
+          if (index > -1) {
+
+            valueCopy.splice(index, 1);
+            valueCopy = [...valueCopy, a]
+            this.setStorageData(key, JSON.stringify(valueCopy))
+          }
+      }
+      else {
+        valueCopy = [...valueCopy, a]
+        this.setStorageData(key, JSON.stringify(valueCopy))
+      }
+    })
+  } catch (error) {
+}
+}
+
+
+
 
   getItem = (key) => {
     AsyncStorage.getItem(key, (err, result) => {console.log(result)})
@@ -79,6 +183,8 @@ class FestivalPage extends Component {
 
   saveFestival = () => {
     const { selectedFestival} = this.props.navigation.state.params
+    const { events, areas, categories } = this.state
+    console.log("events", events);
     //Get all keys in AS,
     // check if 'festival' in keys
       //If yes get whats in festival value
@@ -91,10 +197,16 @@ class FestivalPage extends Component {
     AsyncStorage.getAllKeys((err, keys) => {
       if (keys.includes('festivals')) {
         this.getStorageData('festivals', selectedFestival)
+        this.getStorageDataArr('events', events)
+        this.getStorageDataArr('areas', areas)
+
+
         this.getItem('festivals')
       }
       else {
         this.setStorageData('festivals', JSON.stringify([selectedFestival]))
+        this.setStorageData('events', JSON.stringify([...events]))
+        this.setStorageData('areas', JSON.stringify([...areas]))
       }
     });
   }
@@ -109,13 +221,8 @@ class FestivalPage extends Component {
 
   componentDidMount() {
     //Implement ifelse based on if festival is saved or not and make a call to api or asyncstorage
-    getFestivalAreas(this.props.navigation.state.params.selectedFestival.id)
-    .then(areas => this.setState({areas}))
-    getFestivalEvents(this.props.navigation.state.params.selectedFestival.id)
-    .then(events => this.sortByDate(events))
-    .then(events => this.setState({events}))
-    getFestivalCategories(this.props.navigation.state.params.selectedFestival.id)
-    .then(categories => this.setState({categories}))
+    const { selectedFestival } = this.props.navigation.state.params
+    this.retrieveData('festivals', selectedFestival)
   }
 
   findEventArea = (id) => {
@@ -327,29 +434,23 @@ class FestivalPage extends Component {
             </ScrollView>:null
         }
 
-      <View>
+
+      <View style={{marginLeft: 50, flex: 1, flexDirection:'row', alignItems:'center', marginBottom: 10}}>
+
       <Button
-        icon={{
-              name: 'close',
-              size: 30,
-              color: '#333',
-            }}
         title="Save"
         onPress={this.saveFestival}
-        buttonStyle={{backgroundColor: 'blue', height: 50, margin:10}}/>
+        textStyle={{color:'#333'}}
+        buttonStyle={{borderColor:'gold', borderWidth:1, width:100, borderRadius:3,backgroundColor: 'transparent', height: 45}}/>
+
         />
         <Button
-          icon={{
-                name: 'close',
-                size: 30,
-                color: '#333',
-              }}
-          title="remove"
+          title="Remove"
           onPress={() => {this.removeItemFromStorage("festivals")}}
-          buttonStyle={{backgroundColor: 'blue', height: 50, margin:10}}/>
+          textStyle={{color:'#333'}}
+          buttonStyle={{borderColor:'#333',borderWidth:1, width: 100, borderRadius:3,backgroundColor: 'transparent', height: 45}}/>
           />
-      </View>
-
+        </View>
       </ScrollView>
     );
   }
