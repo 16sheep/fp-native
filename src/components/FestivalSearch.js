@@ -20,7 +20,6 @@ class FestivalSearch extends Component {
   };
 
   findFestival = (id) => {
-    console.log("FESTIVAL ID", id)
     let fest = this.state.festivals.find(f => f.id === id )
     return fest
   }
@@ -54,7 +53,6 @@ class FestivalSearch extends Component {
   componentDidMount () {
     getFestivals()
     .then((festivals) => {
-        console.log(festivals)
         this.setState({
         festivals: festivals
       })

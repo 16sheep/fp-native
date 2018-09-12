@@ -36,7 +36,6 @@ class FestivalPage extends Component {
     const value = await AsyncStorage.getItem(key);
     if (value !== null) {
 
-      console.log(value);
     }
    } catch (error) {
      // Error retrieving data
@@ -45,25 +44,16 @@ class FestivalPage extends Component {
 
   getStorageData = async (key, item) => {
     try {
-      const value = await AsyncStorage.getItem(key);
-      console.log("Value after parse", typeof value)
-      const valueCopy = await JSON.parse(value)
-      console.log("ValueCOPY", valueCopy)
+      const value = await JSON.parse(AsyncStorage.getItem(key));
 
       const sameItem = valueCopy.find((i => {
-        console.log("in find i.id", i.id);
         return i.id === item.id}))
-      console.log("SAMEITEMID", sameItem.id)
 
       if (sameItem) {
-        console.log("SAMEITEM", sameItem);
         var index = valueCopy.indexOf(sameItem);
           if (index > -1) {
-            console.log("INDEX", index);
             valueCopy.splice(index, 1);
-            console.log("valueCopy before splice", valueCopy)
             valueCopy = [...valueCopy, item]
-            console.log("valueCopy after splice", valueCopy)
             this.setStorageData(key, JSON.stringify([valueCopy]))
           }
       }
@@ -81,7 +71,7 @@ class FestivalPage extends Component {
 
   removeItemFromStorage = async (key) => {
     try {
-      await AsyncStorage.removeItem(key, console.log(AsyncStorage.getAllKeys()));
+      await AsyncStorage.removeItem(key);
     } catch (error) {
       console.log("Error at removeItemFromStorage", error)
     }
@@ -100,13 +90,10 @@ class FestivalPage extends Component {
 
     AsyncStorage.getAllKeys((err, keys) => {
       if (keys.includes('festivals')) {
-        console.log(keys)
-        console.log(selectedFestival);
         this.getStorageData('festivals', selectedFestival)
         this.getItem('festivals')
       }
       else {
-        console.log("setstorage about to be called from else statement in getAllKEys")
         this.setStorageData('festivals', JSON.stringify([selectedFestival]))
       }
     });
@@ -117,7 +104,6 @@ class FestivalPage extends Component {
     copy.sort((a,b) => {
       return new Date(a.time_from) - new Date(b.time_from);
     })
-    console.log("COPY", copy)
     return copy
   }
 
