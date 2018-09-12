@@ -82,7 +82,7 @@ class FestivalSearch extends Component {
         />
 
         <List containerStyle={{marginBottom: 20, width:'80%', borderRadius:3, borderColor: 'white', backgroundColor:'transparent'}}>{
-          filteredFestivals.map((f) => {return <ListItem onPress={() => {this.selectFestival(f.id)}} key={`festival-list-item-${f}`}title={f.name}/>})
+          filteredFestivals.map((f) => {return <ListItem onPress={() => {this.selectFestival(f.id)}} key={`festival-list-item-${f.id}`}title={f.name}/>})
         }
         </List>
         </View>
