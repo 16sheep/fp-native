@@ -1,5 +1,6 @@
-const urlBase = `http://localhost:3006/api/v1`
+import { AsyncStorage } from "react-native"
 
+const urlBase = `http://localhost:3006/api/v1`
 //Get all Festivals
 
 const getFestivals = () => {
@@ -22,7 +23,29 @@ const getFestivalEvents = (id) => {
   }).then(resp => resp.json())
 }
 
+//AsyncStorage
 
+_storeData = async (key, value) => {
+  try {
+    await AsyncStorage.setItem(key, value);
+  } catch (error) {
+    // Error saving data
+  }
+}
+
+_retrieveData = async (key) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      // We have data!!
+      console.log("val",value);
+    }
+   } catch (error) {
+     console.log("err", error);
+   }
+}
+
+_retrieveData("areas")
 
 export {
   getFestivalEvents,

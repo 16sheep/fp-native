@@ -53,9 +53,12 @@ class FestivalSearch extends Component {
 
   componentDidMount () {
     getFestivals()
-    .then((festivals) => this.setState({
-      festivals: festivals
-    }))
+    .then((festivals) => {
+        console.log(festivals)
+        this.setState({
+        festivals: festivals
+      })
+    })
   }
 
 

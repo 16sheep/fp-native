@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Dimensions, TextInput, View, ScrollView, Image} from 'react-native';
 import { ButtonGroup, List, ListItem, Text, Button} from 'react-native-elements'
 import {getFestivalAreas, getFestivalEvents, getFestivalCategories} from '../adapter/adapter.js'
+import { AsyncStorage } from "react-native"
 
 let width = Dimensions.get('window').width
 let height = Dimensions.get('window').height
@@ -18,17 +19,117 @@ class FestivalPage extends Component {
     selectedIndex: 0,
     selectedEvent: "",
     selectedArea:"",
-    selectedCategory: ""
+    selectedCategory: "",
+    saved:false
   }
 
   updateIndex = (selectedIndex) => {
     this.setState({selectedIndex})
   }
 
+  setStorageData = (key, newItem, func) => {
+    AsyncStorage.setItem(key, newItem, () => _retrieveData(key))
+  }
+
+  _retrieveData = async (key) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+
+      console.log(value);
+    }
+   } catch (error) {
+     // Error retrieving data
+   }
+}
+
+  getStorageData = async (key, item) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      console.log("Value after parse", typeof value)
+      const valueCopy = await JSON.parse(value)
+      console.log("ValueCOPY", valueCopy)
+
+      const sameItem = valueCopy.find((i => {
+        console.log("in find i.id", i.id);
+        return i.id === item.id}))
+      console.log("SAMEITEMID", sameItem.id)
+
+      if (sameItem) {
+        console.log("SAMEITEM", sameItem);
+        var index = valueCopy.indexOf(sameItem);
+          if (index > -1) {
+            console.log("INDEX", index);
+            valueCopy.splice(index, 1);
+            console.log("valueCopy before splice", valueCopy)
+            valueCopy = [...valueCopy, item]
+            console.log("valueCopy after splice", valueCopy)
+            this.setStorageData(key, JSON.stringify([valueCopy]))
+          }
+      }
+     } catch (error) {
+  }
+}
+
+  getItem = (key) => {
+    AsyncStorage.getItem(key, (err, result) => {console.log(result)})
+  }
+
+  getKeys = () => {
+    AsyncStorage.getAllKeys(key, (err, result) => {console.log(result)})
+  }
+
+  removeItemFromStorage = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key, console.log(AsyncStorage.getAllKeys()));
+    } catch (error) {
+      console.log("Error at removeItemFromStorage", error)
+    }
+  }
+
+  saveFestival = () => {
+    const { selectedFestival} = this.props.navigation.state.params
+    //Get all keys in AS,
+    // check if 'festival' in keys
+      //If yes get whats in festival value
+      //check if selectedFestival id exists in that array of festivals
+        //if yes remove it
+        //copy the array and push new festival in the array
+        //if no copy array and push selectedFestival into it
+      // push new festivals array to AS
+
+    AsyncStorage.getAllKeys((err, keys) => {
+      if (keys.includes('festivals')) {
+        console.log(keys)
+        console.log(selectedFestival);
+        this.getStorageData('festivals', selectedFestival)
+        this.getItem('festivals')
+      }
+      else {
+        console.log("setstorage about to be called from else statement in getAllKEys")
+        this.setStorageData('festivals', JSON.stringify([selectedFestival]))
+      }
+    });
+  }
+
+  sortByDate = (arr) => {
+    const copy = [...arr]
+    copy.sort((a,b) => {
+      return new Date(a.time_from) - new Date(b.time_from);
+    })
+    console.log("COPY", copy)
+    return copy
+  }
+
   componentDidMount() {
-    getFestivalAreas(this.props.navigation.state.params.selectedFestival.id).then(areas => this.setState({areas}))
-    getFestivalEvents(this.props.navigation.state.params.selectedFestival.id).then(events => this.setState({events}))
-    getFestivalCategories(this.props.navigation.state.params.selectedFestival.id).then(categories => this.setState({categories}))
+    //Implement ifelse based on if festival is saved or not and make a call to api or asyncstorage
+    getFestivalAreas(this.props.navigation.state.params.selectedFestival.id)
+    .then(areas => this.setState({areas}))
+    getFestivalEvents(this.props.navigation.state.params.selectedFestival.id)
+    .then(events => this.sortByDate(events))
+    .then(events => this.setState({events}))
+    getFestivalCategories(this.props.navigation.state.params.selectedFestival.id)
+    .then(categories => this.setState({categories}))
   }
 
   findEventArea = (id) => {
@@ -239,6 +340,29 @@ class FestivalPage extends Component {
               </View>
             </ScrollView>:null
         }
+
+      <View>
+      <Button
+        icon={{
+              name: 'close',
+              size: 30,
+              color: '#333',
+            }}
+        title="Save"
+        onPress={this.saveFestival}
+        buttonStyle={{backgroundColor: 'blue', height: 50, margin:10}}/>
+        />
+        <Button
+          icon={{
+                name: 'close',
+                size: 30,
+                color: '#333',
+              }}
+          title="remove"
+          onPress={() => {this.removeItemFromStorage("festivals")}}
+          buttonStyle={{backgroundColor: 'blue', height: 50, margin:10}}/>
+          />
+      </View>
 
       </ScrollView>
     );
