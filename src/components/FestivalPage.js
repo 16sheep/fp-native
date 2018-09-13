@@ -36,18 +36,28 @@ class FestivalPage extends Component {
     const value = await AsyncStorage.getItem(key);
     value = JSON.parse(value);
     console.log("VALUE", value);
-    console.log(selectedFestival);
-    const foundFestival = value.find((f) => {
-      return f.id === selectedFestival.id
-    })
-    if (value && foundFestival ) {
+    console.log("lastlog", selectedFestival);
+
+
+    let foundFestival = {}
+
+    if (value) {
+      foundFestival = value.find((f) => {
+        console.log("f.id", f)
+        return f.id === selectedFestival.id
+      })
+    }
+    console.log("found", foundFestival)
+
+    if (value !== null && foundFestival ) {
+        console.log("on if fail")
         this.success(selectedFestival)
     }
     else {
       console.log("on fail else");
       this.fail(selectedFestival)
     }
-   } catch (error) {
+  } catch (error) {
      // Error retrieving data
    }
 }
@@ -97,8 +107,7 @@ class FestivalPage extends Component {
     .then(events => this.setState({events}))
 
     getFestivalCategories(selectedFestival.id)
-    .then(categories => {
-      console.log("cats",categories);this.setState({categories})})
+    .then(categories => this.setState({categories: Object.keys(categories)}))
   }
 
   getStorageData = async (key, item) => {
@@ -173,9 +182,9 @@ getStorageDataArr = async (key, item) => {
     AsyncStorage.getAllKeys(key, (err, result) => {console.log(result)})
   }
 
-  removeItemFromStorage = async (key) => {
+  removeItemsFromStorage = async () => {
     try {
-      await AsyncStorage.removeItem(key);
+      await AsyncStorage.removeItem('festivals');
     } catch (error) {
       console.log("Error at removeItemFromStorage", error)
     }
@@ -222,6 +231,7 @@ getStorageDataArr = async (key, item) => {
   componentDidMount() {
     //Implement ifelse based on if festival is saved or not and make a call to api or asyncstorage
     const { selectedFestival } = this.props.navigation.state.params
+    console.log("selectedFestivalat mount", selectedFestival);
     this.retrieveData('festivals', selectedFestival)
   }
 
@@ -251,7 +261,8 @@ getStorageDataArr = async (key, item) => {
     const { selectedFestival} = this.props.navigation.state.params
     const { areas, events, categories, selectedIndex, areaFilter, eventFilter, categoryFilter, selectedEvent, selectedArea, selectedCategory } = this.state
     const buttons = ['EVENTS', 'CATEGORIES', 'AREAS', "MAP"]
-    const cats = Object.keys(categories) ? Object.keys(categories):[]
+
+    console.log("categories", categories);
 
     const filteredEvents = events.filter((e) => {
       if (e.name.toLowerCase().includes(eventFilter.toLowerCase())) {
@@ -274,7 +285,7 @@ getStorageDataArr = async (key, item) => {
       })
     }
 
-    const filteredCategories = cats.filter((c) => {
+    const filteredCategories = categories.filter((c) => {
       if (c.toLowerCase().includes(categoryFilter.toLowerCase())) {
         return c
       }
@@ -446,7 +457,7 @@ getStorageDataArr = async (key, item) => {
         />
         <Button
           title="Remove"
-          onPress={() => {this.removeItemFromStorage("festivals")}}
+          onPress={() => {this.removeItemsFromStorage()}}
           textStyle={{color:'#333'}}
           buttonStyle={{borderColor:'#333',borderWidth:1, width: 100, borderRadius:3,backgroundColor: 'transparent', height: 45}}/>
           />
