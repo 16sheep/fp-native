@@ -26,8 +26,20 @@ class FestivalSearch extends Component {
     return fest
   }
 
+  findMyFestival = (id) => {
+    let fest = this.state.myFestivals.find(f => f.id === id )
+    return fest
+  }
+
   selectFestival = (f) => {
     let selectedFestival = this.findFestival(f)
+    this.setState({
+      selectedFestival: selectedFestival
+    })
+  }
+
+  selectMyFestival = (f) => {
+    let selectedFestival = this.findMyFestival(f)
     this.setState({
       selectedFestival: selectedFestival
     })
@@ -84,6 +96,8 @@ class FestivalSearch extends Component {
 
 
   render() {
+
+    console.log("STATE", this.state);
     const filteredFestivals = this.state.festivals.filter((f) => {
       if (f.name.toLowerCase().includes(this.state.festivalFilter.toLowerCase())) {
         return f
@@ -124,7 +138,8 @@ class FestivalSearch extends Component {
         {
           this.state.toggleSaved?
             <List containerStyle={{marginBottom: 20, width:'80%', borderRadius:3, borderColor: 'white', backgroundColor:'transparent'}}>{
-              myFilteredFestivals.map((f) => {return <ListItem onPress={() => {this.selectFestival(f.id)}} key={`festival-list-item-${f.id}`}title={f.name}/>})
+              myFilteredFestivals.map((f) => {return <ListItem onPress={() => {
+                this.selectMyFestival(f.id)}} key={`festival-list-item-${f.id}`}title={f.name}/>})
             }</List>:
             <List containerStyle={{marginBottom: 20, width:'80%', borderRadius:3, borderColor: 'white', backgroundColor:'transparent'}}>{
               filteredFestivals.map((f) => {return <ListItem onPress={() => {this.selectFestival(f.id)}} key={`festival-list-item-${f.id}`}title={f.name}/>})

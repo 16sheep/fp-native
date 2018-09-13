@@ -21,7 +21,7 @@ export default class SecretInput extends React.Component {
     return(
       <View style={{width:'100%', flex:1, alignItems:'center', position:'absolute', height:500, backgroundColor:'rgba(255, 255, 255, 0.9)', top: 40}}>
         <View style={{ top:150, width:'100%', flex:1, alignItems:'center', position:'absolute'}}>
-
+        <Text h4 style={{color:'#666', marginBottom: 10}}>{selectedFestival.name}</Text>
         <TextInput
           value={this.state.secret}
           onChangeText={(secret) => {

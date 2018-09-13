@@ -62,10 +62,6 @@ class FestivalPage extends Component {
    }
 }
 
-  onlyUnique = (value, index, self) => {
-    return self.indexOf(value) === index;
-  }
-
   success = async (selectedFestival) => {
     ("GOING TO AS")
     try {
@@ -74,22 +70,19 @@ class FestivalPage extends Component {
 
       let areas = await AsyncStorage.getItem('areas');
       areas = JSON.parse(areas);
-      const uniqueCats = {}
 
       const festivalEvents = events.filter((e) => e.festival_id === selectedFestival.id)
       const festivalAreas = areas.filter((a) => a.festival_id === selectedFestival.id)
       console.log(festivalEvents[1])
-      const filteredCategories = festivalEvents.filter((c) => {
+      const filteredCategories = festivalEvents.map((c) => {
           return c.category
       })
+      const unique = filteredCategories.filter((v, i, a) => a.indexOf(v) === i);
 
-
-
-      console.log(uniqueCats);
       this.setState({
         events: festivalEvents,
         areas: festivalAreas,
-        categories: uniqueCats
+        categories: unique
       })
 
      } catch (error) {
