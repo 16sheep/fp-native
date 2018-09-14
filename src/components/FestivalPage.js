@@ -178,6 +178,9 @@ getStorageDataArr = async (key, item) => {
   removeItemsFromStorage = async () => {
     try {
       await AsyncStorage.removeItem('festivals');
+      await AsyncStorage.removeItem('events');
+      await AsyncStorage.removeItem('areas');
+
     } catch (error) {
       console.log("Error at removeItemFromStorage", error)
     }
@@ -448,12 +451,6 @@ getStorageDataArr = async (key, item) => {
         buttonStyle={{borderColor:'gold', borderWidth:1, width:100, borderRadius:3,backgroundColor: 'transparent', height: 45}}/>
 
         />
-        <Button
-          title="Remove"
-          onPress={() => {this.removeItemsFromStorage()}}
-          textStyle={{color:'#333'}}
-          buttonStyle={{borderColor:'#333',borderWidth:1, width: 100, borderRadius:3,backgroundColor: 'transparent', height: 45}}/>
-          />
         </View>
       </ScrollView>
     );

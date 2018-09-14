@@ -111,7 +111,7 @@ class FestivalSearch extends Component {
     })
 
     return (
-      <ScrollView style={{flex: 1, backgroundColor: "white"}}>
+      <ScrollView style={{backgroundColor:'#7AC7EA',flex: 1, backgroundColor: "white"}}>
       <View>
          <Image style={{ height: 700, width: 375, position: 'absolute', top:0, left:0 }} source={require('./logo.png')} />
       </View>
